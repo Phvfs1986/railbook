@@ -1,0 +1,12 @@
+<h1>Your profile:</h1>
+<%= form_with model: @profile do |f| %>
+  <p>
+    <%= f.label :first_name %>
+    <%= f.text_field :first_name %>
+  </p>
+  <p>
+  <%= f.label :last_name %>
+  <%= f.text_field :last_name %>
+  </p>
+  <%= f.submit %>
+<% end %>

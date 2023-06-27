@@ -1,0 +1,12 @@
+<% if current_user.profile.first_name.nil? %>
+  <p>Please update your profile before continuing!</p>
+  <%= link_to 'Update your profile', edit_profile_path(current_user) %>
+<% else %>
+  <p>Hello <%= current_user.profile.first_name %>, this is your user page!</p>
+  <h2>Below is a list of all users:</h2>
+  <% @users.each do |user| %>
+    <% unless user.profile.first_name.nil? || user == current_user %>
+      <%= link_to user.profile.first_name, profile_path(user) %>
+    <% end %>
+  <% end %>
+<% end %>
