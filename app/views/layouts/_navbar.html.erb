@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <% unless current_user.profile.first_name.nil? %>
+              <%= link_to current_user.profile.first_name, profile_path(current_user), class: "nav-link active" %>
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <div class="d-flex align-items-center">
+              <%= link_to user_friend_list_path(current_user), class: "nav-link active d-flex align-items-center" do %>
+              Friend List
+              <% unless current_user.pending_friends.empty? %>
+                <%= image_tag('priority_high.svg', width: '20', class: 'bs-danger') %>
+              <% end %>
+              <% end %>
+            </div>
+          </li>
+        <li class="nav-item">
+          <%= link_to 'Log Out', destroy_user_session_path, 'data-turbo-method': :delete, class: "nav-link active" %>
+        </li>
+        <% end %>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
