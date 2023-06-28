@@ -1,3 +1,5 @@
 <h1>This is <%= @profile.first_name %> <%= @profile.last_name %>'s profile page!</h1>
 
-<p><%= link_to 'Add Friend', user_create_request_path(params[:id]) unless current_user.friends.includes(@profile) %></p>
+<% unless current_user.friends.include?(@profile) %>
+  <p><%= link_to 'Add Friend', user_create_request_path(params[:id]) %></p>
+<% end %>
