@@ -14,6 +14,10 @@ class User < ApplicationRecord
   has_many :received_friendships, class_name: 'Friendship', foreign_key: 'friend_id'
   has_many :received_friends, through: :received_friendships, source: 'user'
 
+  has_many :posts, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :liked_posts, through: :likes, source: :post
+
   after_create :create_profile
 
   def active_friends

@@ -5,9 +5,12 @@ Rails.application.routes.draw do
 
   get 'users/create_request/:id', to: 'users#create_request', as: 'user_create_request'
   get 'users/friend_list/:id', to: 'users#friend_list', as: 'user_friend_list'
-  resources :profiles, only: %i[show edit update]
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
+  get 'likes/add_like/:id', to: 'likes#add_like', as: 'add_like'
+  get 'likes/remove_like/:id', to: 'likes#remove_like', as: 'remove_like'
+
+  resources :profiles, only: %i[show edit update]
+  resources :posts, only: %i[index new create]
+
   root 'users#index'
 end

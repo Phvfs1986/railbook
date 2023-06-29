@@ -1,0 +1,35 @@
+<h1>Timeline:</h1>
+<div class="new-post-form">
+  <%= form_with model: Post.new, url: posts_path do |form| %>
+    <%= form.text_area :body, class: "form-control", rows: 3 %>
+    <%= form.submit 'Create Post' %>
+  <% end %>
+</div>
+<% if @post&.errors&.any? %>
+  <div class="alert alert-danger">
+    <ul>
+      <% @post.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<hr class="hr hr-blurry" />
+
+<% @posts.each do |post| %>
+  <div class="container-fluid bg-light">
+    <p><strong><%= post.user.profile.first_name %></strong> at <%= post.created_at.strftime('%H:%M') %></p>
+  </div>
+  <div class="p-3 text-primary-emphasis bg-secondary-subtle">
+    <p><%= post.body %></p>
+  </div>
+  <% unless current_user.liked_posts.include?(post) || post.user == current_user %>
+    <%= link_to 'Like Post', add_like_path(post) %>
+  <% end %>
+  <% if current_user.liked_posts.include?(post) %>
+    <%= link_to 'Remove Like', remove_like_path(post) %>
+  <% end %>
+  <%= post.likes.count %> Likes
+  <hr class="hr hr-blurry" />
+
+<% end %>
