@@ -1,5 +1,5 @@
 <h1>Timeline:</h1>
-<div class="new-post-form">
+<div class="new-post-form"></div>
   <%= form_with model: Post.new, url: posts_path do |form| %>
     <%= form.text_area :body, class: "form-control", rows: 3 %>
     <%= form.submit 'Create Post' %>
@@ -7,6 +7,7 @@
 </div>
 <% if @post&.errors&.any? %>
   <div class="alert alert-danger">
+    <p><strong>Post error:</strong></p>
     <ul>
       <% @post.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -14,22 +15,90 @@
     </ul>
   </div>
 <% end %>
-<hr class="hr hr-blurry" />
-
-<% @posts.each do |post| %>
-  <div class="container-fluid bg-light">
-    <p><strong><%= post.user.profile.first_name %></strong> at <%= post.created_at.strftime('%H:%M') %></p>
+<% if @comment&.errors&.any? %>
+  <div class="alert alert-danger">
+    <p><strong>Comment error:</strong></p>
+    <ul>
+      <% @comment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
   </div>
-  <div class="p-3 text-primary-emphasis bg-secondary-subtle">
-    <p><%= post.body %></p>
-  </div>
-  <% unless current_user.liked_posts.include?(post) || post.user == current_user %>
-    <%= link_to 'Like Post', add_like_path(post) %>
-  <% end %>
-  <% if current_user.liked_posts.include?(post) %>
-    <%= link_to 'Remove Like', remove_like_path(post) %>
-  <% end %>
-  <%= post.likes.count %> Likes
-  <hr class="hr hr-blurry" />
+<% end %>
 
+
+<% @posts_with_comments.each do |post, comments| %>
+  <section class="gradient-custom">
+    <div class="container my-3 py-3">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-12 col-lg-10 col-xl-8">
+          <div class="card">
+            <div class="card-body p-1">
+
+              <div class="row">
+                <div class="col">
+                  <div class="d-flex flex-start">
+                    <a class="me-3" href="<%= profile_path(post.user) %>">
+                      <%= image_tag post.user.gravatar_url, default: "blank", size: 60, class: "rounded-circle shadow-1-strong me-3" %>
+                    </a>
+                    <div class="flex-grow-1 flex-shrink-1">
+                      <div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <p class="mb-1">
+                            <%= post.user.profile.first_name %><span class="small"> - <%= post.created_at.strftime('%H:%M') %></span>
+                          </p>
+
+                        </div>
+                        <p class="small mb-0">
+                          <%= post.body %>
+                        </p>
+                        <% unless current_user.liked_posts.include?(post) || post.user == current_user %>
+                          <%=  %>
+                          <small><%= link_to image_tag('thumbs-up.svg'), add_like_path(post) %></small>
+                        <% end %>
+                        <% if current_user.liked_posts.include?(post) %>
+                          <small><%= link_to image_tag('thumbs-down.svg'), remove_like_path(post) %></small>
+                        <% end %>
+                        <% unless post.likes.count.zero? %>
+                          <small><%= post.likes.count %> Likes</small>
+                        <% end %>
+                      </div>
+                      <% unless comments.empty? %>
+                        <% comments.each do |comment| %>
+                          <div class="d-flex flex-start mt-4">
+                            <a class="me-3" href="<%= profile_path(comment.user) %>">
+                              <%= image_tag comment.user.gravatar_url, default: "blank", size: 60, class: "rounded-circle shadow-1-strong me-3" %>
+                            </a>
+                            <div class="flex-grow-1 flex-shrink-1">
+                              <div>
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                  <p class="mb-1">
+                                    <%= comment.user.profile.first_name %><span class="small"> at <%= comment.created_at.strftime('%H:%M') %></span>
+                                  </p>
+                                </div>
+                                <p class="small mb-0">
+                                  <%= comment.body %>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        <% end %>
+                      <% end %>
+                      <div class="d-flex flex-start mt-4">
+                        <%= form_with model: Comment.new, url: comments_path(id: post.id) do |form| %>
+                          <p><%= form.text_area :body, class: "form-control", rows: 3, cols: 50 %></p>
+                          <p><small><%= form.submit 'Comment' %></small></p>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 <% end %>

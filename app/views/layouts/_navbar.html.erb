@@ -9,21 +9,35 @@
         <% if user_signed_in? %>
           <li class="nav-item">
             <% unless current_user.profile.first_name.nil? %>
-              <%= link_to current_user.profile.first_name, profile_path(current_user), class: "nav-link active" %>
+              <button type="button" class="btn position-relative">
+                <%= link_to current_user.profile.first_name, profile_path(current_user), class: "nav-link active" %>
+              </button>
             <% end %>
           </li>
           <li class="nav-item">
             <div class="d-flex align-items-center">
-              <%= link_to user_friend_list_path(current_user), class: "nav-link active d-flex align-items-center" do %>
-              Friend List
+              <button type="button" class="btn position-relative">
+                <%= link_to user_friend_list_path(current_user), class: "nav-link active d-flex align-items-center" do %>
+                Friend List
               <% unless current_user.pending_friends.empty? %>
-                <%= image_tag('priority_high.svg', width: '20', class: 'bs-danger') %>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  <%= current_user.pending_friends.count %>
+                  <span class="visually-hidden">unread messages</span>
+                </span>
               <% end %>
+              </button>
               <% end %>
             </div>
           </li>
         <li class="nav-item">
-          <%= link_to 'Log Out', destroy_user_session_path, 'data-turbo-method': :delete, class: "nav-link active" %>
+          <button type="button" class="btn position-relative">
+            <%= link_to 'Timeline', posts_path, class: "nav-link active" %>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="btn position-relative">
+            <%= link_to 'Log Out', destroy_user_session_path, 'data-turbo-method': :delete, class: "nav-link active" %>
+          </button>
         </li>
         <% end %>
       </ul>

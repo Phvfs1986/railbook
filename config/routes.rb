@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 
   get 'users/create_request/:id', to: 'users#create_request', as: 'user_create_request'
   get 'users/friend_list/:id', to: 'users#friend_list', as: 'user_friend_list'
@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   resources :profiles, only: %i[show edit update]
   resources :posts, only: %i[index new create]
+  resources :comments, only: %i[new create]
 
   root 'users#index'
 end

@@ -5,8 +5,15 @@
     <%= f.text_field :first_name %>
   </p>
   <p>
-  <%= f.label :last_name %>
-  <%= f.text_field :last_name %>
+    <%= f.label :last_name %>
+    <%= f.text_field :last_name %>
+  </p>
+  <p>
+    <% if @profile.avatar.attached? %>
+      <%= image_tag @profile.avatar %>
+    <% else %>
+      <%= f.file_field :avatar %>
+    <% end %>
   </p>
   <%= f.submit %>
 <% end %>

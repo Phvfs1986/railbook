@@ -14,14 +14,20 @@
   </head>
 
   <body>
-    <%= render 'layouts/navbar' %>
+    <% if user_signed_in? %>
+      <%= render 'layouts/navbar' %>
+    <% else %>
+      <div class="alert alert-info">
+        Must be logged in to access!
+      </div>
+    <% end %>
 
     <% flash.each do |type, msg| %>
       <div class="alert alert-info">
         <%= msg %>
       </div>
     <% end %>
-    <div class="container-fluid mt-5">
+    <div class="container my-4 py-4">
       <%= yield %>
     </div>
   </body>

@@ -2,7 +2,10 @@
 
 class ProfilesController < ApplicationController
   def show
-    @profile = User.find(params[:id]).profile
+    @user = User.includes(:friends).find(params[:id])
+    @profile = @user.profile
+    @user_posts = @user.posts
+    @user_full_name = "#{@profile.first_name} #{@profile.last_name}"
   end
 
   def edit
@@ -24,6 +27,6 @@ class ProfilesController < ApplicationController
   private
 
   def profile_params
-    params.require(:profile).permit(:first_name, :last_name)
+    params.require(:profile).permit(:first_name, :last_name, :avatar)
   end
 end

@@ -3,6 +3,7 @@
 class PostsController < ApplicationController
   def index
     @posts = (current_user.posts + current_user.friends.flat_map(&:posts))
+    @posts_with_comments = @posts.map { |post| [post, post.comments.includes(:user)] }
   end
 
   def new

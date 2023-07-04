@@ -1,8 +1,12 @@
-<h1>Your Friends:</h1>
-<% @friends.each do |friend| %>
-  <p><%= link_to friend.profile.first_name, profile_path(friend) %></p>
-<% end %>
-<h1>Pending Requests:</h1>
-<% @requests.each do |request| %>
-  <p><%= link_to request.profile.first_name, profile_path(request) %></p>
-<% end %>
+<ul>
+  <h1>Your Friends:</h1>
+  <% @friends.each do |friend| %>
+    <li><%= link_to friend.profile.first_name, profile_path(friend) %></li>
+  <% end %>
+</ul>
+<ul><br><br>
+  <h1>Pending Requests:</h1>
+  <% @requests.each do |request| %>
+    <li><%= link_to request.profile.first_name, profile_path(request) %></li>
+  <% end %>
+</ul>

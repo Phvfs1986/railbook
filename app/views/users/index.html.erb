@@ -2,11 +2,18 @@
   <p>Please update your profile before continuing!</p>
   <%= link_to 'Update your profile', edit_profile_path(current_user) %>
 <% else %>
-  <h1>Hello <%= current_user.profile.first_name %>, this is your user page!</h1>
   <h2>Below is a list of all users:</h2>
   <% @users.each do |user| %>
     <% unless user.profile.first_name.nil? || user == current_user %>
-      <p><%= link_to user.profile.first_name, profile_path(user) %></p>
+      <h5 class="d-flex flex-column mb-3">
+        <div class="p-2 flex-fill">
+          <%= image_tag user.gravatar_url, default: "blank", size: 60, class: "rounded-circle shadow-1-strong me-3" %>
+          <%= link_to user.profile.first_name, profile_path(user) %>
+          <% unless user.friends.include?(current_user) || @user == current_user %>
+            <small><span class="badge bg-primary rounded-pill"><%= link_to 'Add Friend', user_create_request_path(user), class: "link-light link-underline-opacity-0" %></span></small>
+          <% end %>
+        </div>
+      </h5>
     <% end %>
   <% end %>
 <% end %>

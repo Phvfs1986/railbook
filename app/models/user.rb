@@ -4,7 +4,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :omniauthable, omniauth_providers: %i[facebook]
 
   has_one :profile, dependent: :destroy
 
@@ -17,8 +18,22 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :liked_posts, through: :likes, source: :post
+  has_many :comments, dependent: :destroy
 
   after_create :create_profile
+
+  include Gravtastic
+  gravtastic
+
+  def self.from_omniauth(auth)
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+      user.email = auth.info.email
+      user.provider = auth.provider
+      user.uid = auth.uid
+      user.password = Devise.friendly_token[0, 20]
+      user.avatar_url = auth.info.image
+    end
+  end
 
   def active_friends
     friends.select { |friend| friend.friends.include?(self) }
