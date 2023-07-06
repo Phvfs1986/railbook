@@ -20,6 +20,8 @@ class User < ApplicationRecord
   has_many :liked_posts, through: :likes, source: :post
   has_many :comments, dependent: :destroy
 
+  after_create :send_welcome_email
+
   include Gravtastic
   gravtastic
 
@@ -32,6 +34,10 @@ class User < ApplicationRecord
       user.uid = auth.uid
       user.avatar_url = auth.info.image
     end
+  end
+
+  def send_welcome_email
+    UserMailer.welcome_email(self).deliver_now
   end
 
   def self.new_with_session(params, session)
