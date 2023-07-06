@@ -1,12 +1,27 @@
-<ul>
+<% if current_user.active_friends.empty? %>
+  <h1>No friends yet!</h1>
+<% else %>
   <h1>Your Friends:</h1>
-  <% @friends.each do |friend| %>
-    <li><%= link_to friend.profile.first_name, profile_path(friend) %></li>
+  <% current_user.active_friends.each do |friend| %>
+    <h5 class="d-flex flex-column mb-3">
+      <div class="p-2 flex-fill">
+        <%= image_tag user_avatar(friend), class: "rounded-circle shadow-1-strong me-3" %>
+        <%= link_to friend.full_name, user_path(friend) %>
+      </div>
+    </h5>
   <% end %>
-</ul>
-<ul><br><br>
-  <h1>Pending Requests:</h1>
-  <% @requests.each do |request| %>
-    <li><%= link_to request.profile.first_name, profile_path(request) %></li>
+  <br>
+<% end %>
+
+<% unless current_user.pending_friends.empty? %>
+  <h1>Friend Requests:</h1>
+  <% current_user.pending_friends.each do |request| %>
+    <h5 class="d-flex flex-column mb-3">
+      <div class="p-2 flex-fill">
+        <%= image_tag user_avatar(request), class: "rounded-circle shadow-1-strong me-3" %>
+        <%= request.first_name + ' ' + request.last_name %>
+        <small><span class="badge bg-primary rounded-pill"><%= link_to 'Add Friend', user_create_request_path(request), class: "link-light link-underline-opacity-0" %></span></small>
+      </div>
+    </h5>
   <% end %>
-</ul>
+<% end %>

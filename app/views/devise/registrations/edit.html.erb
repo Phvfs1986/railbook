@@ -3,6 +3,27 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  <div class='field'>
+    <% if resource.avatar_url.nil? %>
+      <p><%= image_tag user_avatar(resource), class: "rounded-circle shadow-1-strong me-3" %></p>
+    <% else %>
+      <p><%= image_tag resource.avatar_url, size: 80, class: "rounded-circle shadow-1-strong me-3" %></p>
+    <% end %>
+    <div>
+      <%= f.file_field :avatar %>
+    </div>
+  </div><br>
+
+  <div class="field">
+    <%= f.label :first_name %><br />
+    <%= f.text_field :first_name, autofocus: true, autocomplete: "name" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name %><br />
+    <%= f.text_field :last_name, autofocus: true, autocomplete: "name" %>
+  </div>
+
   <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
@@ -26,10 +47,12 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
+  <% if f.object.encrypted_password.present? %>
+    <div class="field">
+      <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+      <%= f.password_field :current_password, autocomplete: "current-password" %>
+    </div>
+  <% end %>
 
   <div class="actions">
     <%= f.submit "Update" %>

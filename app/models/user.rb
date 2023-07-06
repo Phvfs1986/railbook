@@ -7,7 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: %i[facebook]
 
-  has_one :profile, dependent: :destroy
+  has_one_attached :avatar
 
   has_many :friendships, dependent: :destroy
   has_many :friends, through: :friendships
@@ -20,8 +20,6 @@ class User < ApplicationRecord
   has_many :liked_posts, through: :likes, source: :post
   has_many :comments, dependent: :destroy
 
-  after_create :create_profile
-
   include Gravtastic
   gravtastic
 
@@ -29,10 +27,38 @@ class User < ApplicationRecord
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
       user.provider = auth.provider
+      user.first_name = auth.info.first_name
+      user.last_name = auth.info.last_name
       user.uid = auth.uid
-      user.password = Devise.friendly_token[0, 20]
       user.avatar_url = auth.info.image
     end
+  end
+
+  def self.new_with_session(params, session)
+    if session['devise.user_attributes']
+      new(session['devise.user_attributes'], without_protection: true) do |user|
+        user.attributes = params
+        user.valid?
+      end
+    else
+      super
+    end
+  end
+
+  def password_required?
+    super && provider.blank?
+  end
+
+  def update_with_password(params, *options)
+    if encrypted_password.blank?
+      update(params, *options)
+    else
+      super
+    end
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
   end
 
   def active_friends
@@ -41,11 +67,5 @@ class User < ApplicationRecord
 
   def pending_friends
     friends.reject { |friend| friend.friends.include?(self) }
-  end
-
-  private
-
-  def create_profile
-    build_profile.save
   end
 end
