@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserMailer < ApplicationMailer
-  default from: 'notifications@railbook.com'
+  default from: 'rubyrailstests@gmail.com'
 
   def welcome_email(user)
     @user = user
