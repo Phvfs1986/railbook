@@ -4,11 +4,7 @@
   <%= render "devise/shared/error_messages", resource: resource %>
 
   <div class='field'>
-    <% if resource.avatar_url.nil? %>
-      <p><%= image_tag user_avatar(resource), class: "rounded-circle shadow-1-strong me-3" %></p>
-    <% else %>
-      <p><%= image_tag resource.avatar_url, size: 80, class: "rounded-circle shadow-1-strong me-3" %></p>
-    <% end %>
+    <%= image_tag user_avatar(resource), class: "rounded-circle shadow-1-strong me-3" %></p>
     <div>
       <%= f.file_field :avatar %>
     </div>
