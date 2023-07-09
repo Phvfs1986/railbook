@@ -48,8 +48,8 @@ gem "bootsnap", require: false
 gem 'bullet', group: 'development'
 
 gem 'gravtastic'
-gem "image_processing", ">= 1.2"
 gem 'mini_magick'
+gem "image_processing", ">= 1.2"
 
 gem 'omniauth'
 gem 'omniauth-facebook'

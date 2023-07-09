@@ -63,7 +63,7 @@
                         <% end %>
                       </div>
                       <% unless comments.empty? %>
-                        <% comments.each do |comment| %>
+                        <% post.comments.each do |comment| %>
                           <div class="d-flex flex-start mt-4">
                             <a class="me-3" href="<%= comment.user %>">
                               <%= image_tag user_avatar(comment.user), class: "rounded-circle shadow-1-strong me-3" %>

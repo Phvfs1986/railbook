@@ -17,6 +17,7 @@ class CommentsController < ApplicationController
       redirect_to posts_url
     else
       @posts = Post.all
+      @posts_with_comments = @posts.map { |post| [post, post.comments.includes(:user)] }
       render 'posts/index', status: :unprocessable_entity
     end
   end
