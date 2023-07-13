@@ -2,7 +2,7 @@
 
 class UsersController < ApplicationController
   def index
-    @users = User.all
+    @users = User.includes(:friends, avatar_attachment: :blob).all
     @friendships = current_user.friendships
     @friends = @friendships.select(&:mutual?).map(&:user)
   end

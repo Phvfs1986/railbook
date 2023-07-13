@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  def new
-    @post = Post.find(params[:id])
-    @comment = @post.comments.build(comment_params)
-    @comment.user = current_user
-  end
-
   def create
-    @post = Post.includes(:user).find(params[:id])
+    @post = Post.find(params[:id])
     @comment = @post.comments.build(comment_params)
     @comment.user = current_user
 
@@ -16,8 +10,8 @@ class CommentsController < ApplicationController
       flash[:notice] = 'Post successfully created!'
       redirect_to posts_url
     else
-      @posts = Post.all
-      @posts_with_comments = @posts.map { |post| [post, post.comments.includes(:user)] }
+      @post = Post.new
+      @posts_with_comments = load_posts_with_comments
       render 'posts/index', status: :unprocessable_entity
     end
   end
@@ -26,5 +20,10 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(:body)
+  end
+
+  def load_posts_with_comments
+    posts = (current_user.posts + current_user.friends.flat_map(&:posts))
+    posts.map { |post| [post, post.comments.includes(:user)] }
   end
 end

@@ -1,30 +1,20 @@
 <h1>Timeline:</h1>
-<div class="new-post-form"></div>
-  <%= form_with model: Post.new, url: posts_path do |form| %>
+<div class="new-post-form">
+  <%= form_with model: @post, url: posts_path do |form| %>
     <%= form.text_area :body, class: "form-control", rows: 3 %>
     <%= form.submit 'Create Post' %>
+    <% if @post.errors.any? %>
+      <div class="alert alert-danger">
+        <p><strong>Post error:</strong></p>
+        <ul>
+          <% @post.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
   <% end %>
 </div>
-<% if @post&.errors&.any? %>
-  <div class="alert alert-danger">
-    <p><strong>Post error:</strong></p>
-    <ul>
-      <% @post.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-<% if @comment&.errors&.any? %>
-  <div class="alert alert-danger">
-    <p><strong>Comment error:</strong></p>
-    <ul>
-      <% @comment.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
 
 <% @posts_with_comments.each do |post, comments| %>
   <section class="gradient-custom">
@@ -88,6 +78,16 @@
                         <%= form_with model: Comment.new, url: comments_path(id: post.id) do |form| %>
                           <p><%= form.text_area :body, class: "form-control", rows: 3, cols: 50 %></p>
                           <p><small><%= form.submit 'Comment' %></small></p>
+                          <% if @comment&.errors&.any? %>
+                            <div class="alert alert-danger">
+                              <p><strong>Comment error:</strong></p>
+                              <ul>
+                                <% @comment.errors.full_messages.each do |message| %>
+                                  <li><%= message %></li>
+                                <% end %>
+                              </ul>
+                            </div>
+                          <% end %>
                         <% end %>
                       </div>
                     </div>
