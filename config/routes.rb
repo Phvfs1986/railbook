@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   get 'likes/add_like/:id', to: 'likes#add_like', as: 'add_like'
   get 'likes/remove_like/:id', to: 'likes#remove_like', as: 'remove_like'
 
-  resources :posts, only: %i[index new create]
-  resources :comments, only: %i[new create]
+  resources :posts, except: [:show]
+  resources :comments, only: %i[new create destroy]
   resources :users
 
   root 'users#index'

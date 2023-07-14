@@ -33,10 +33,10 @@
                             <p class="mb-1">
                               <strong><%= @user.first_name %></strong><span class="small"> - <%= post.created_at.strftime('%D at %H:%M') %></span>
                             </p>
-
                           </div>
                           <p class="small mb-0">
-                            <%= post.body %>
+                            <p><%= post.body %></p>
+                            <p><%= image_tag posted_picture(post)if post.picture.attached? %></p>
                           </p>
                           <% unless post.likes.count.zero? %>
                             <small><%= post.likes.count %> Likes</small>

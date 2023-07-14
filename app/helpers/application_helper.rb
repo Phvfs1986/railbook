@@ -12,6 +12,12 @@ module ApplicationHelper
       user.avatar_url
     end
   end
+
+  def posted_picture(post, size = 250)
+    return unless post.picture.attached?
+
+    post.picture.variant(resize: "#{size}x#{size}!")
+  end
 end
 
 # if user.avatar_url.nil?

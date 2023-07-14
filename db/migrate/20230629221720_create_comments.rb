@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 class CreateComments < ActiveRecord::Migration[7.0]
   def change
     create_table :comments do |t|
-      t.references :user, null: false, foreign_key: true
-      t.references :post, null: false, foreign_key: true
+      t.bigint 'user_id', null: false
+      t.integer :commentable_id
+      t.string :commentable_type
 
       t.timestamps
     end
